@@ -3409,7 +3409,7 @@
  				rect.Width = 2;
  				rect.Inflate(6, 12);
 -				float damage = 80f * this.minionDamage;
-+				float damage = 80f * (float)this.minionDamage;
++				float damage = 80f * (float)(minionDamage & allDamage);
  				float knockback = 10f;
  				int nPCImmuneTime = 30;
  				int playerImmuneTime = 6;
@@ -3418,7 +3418,7 @@
  				rect2.Width = 2;
  				rect2.Inflate(6, 12);
 -				float damage2 = 90f * this.minionDamage;
-+				float damage2 = 90f * (float)this.minionDamage;
++				float damage2 = 90f * (float)(minionDamage & allDamage);
  				float knockback2 = 10f;
  				int nPCImmuneTime2 = 30;
  				int playerImmuneTime2 = 6;
@@ -3427,7 +3427,7 @@
  						if (rect.Intersects(rect2) && (nPC.noTileCollide || Collision.CanHit(this.position, this.width, this.height, nPC.position, nPC.width, nPC.height)))
  						{
 -							float num = 40f * this.minionDamage;
-+							float num = 40f * (float)this.minionDamage;
++							float num = 40f * (float)(minionDamage & allDamage);
  							float knockback = 5f;
  							int direction = this.direction;
  							if (this.velocity.X < 0f)
@@ -3436,7 +3436,7 @@
  							if (rectangle.Intersects(rect) && (nPC.noTileCollide || this.CanHit(nPC)))
  							{
 -								float num = 30f * this.meleeDamage;
-+								float num = 30f * (float)this.meleeDamage;
++								float num = 30f * (float)(meleeDamage & allDamage);
  								float num2 = 9f;
  								bool crit = false;
  								if (this.kbGlove)
@@ -3445,7 +3445,7 @@
  								this.ConsumeSolarFlare();
  							}
 -							float num4 = 150f * this.meleeDamage;
-+							float num4 = 150f * (float)this.meleeDamage;
++							float num4 = 150f * (float)(meleeDamage & allDamage);
  							float num5 = 9f;
  							bool crit2 = false;
  							if (this.kbGlove)
