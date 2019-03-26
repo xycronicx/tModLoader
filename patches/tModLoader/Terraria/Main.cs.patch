@@ -1129,7 +1129,7 @@
  			if (hackedScreenHeight != -1 && hackedScreenWidth != -1)
  			{
  				if ((float)num + vector.X + 4f > (float)hackedScreenWidth)
-@@ -14612,27 +_,33 @@
+@@ -14612,45 +_,54 @@
  			{
  				Main.HoverItem.knockBack *= 1f + (1f - Main.player[Main.myPlayer].stealth) * 0.5f;
  			}
@@ -1164,29 +1164,36 @@
  				num4++;
  			}
  			else
-@@ -14640,10 +_,14 @@
+ 			{
  				if (Main.HoverItem.damage > 0 && (!Main.HoverItem.notAmmo || Main.HoverItem.useStyle > 0) && (Main.HoverItem.type < 71 || Main.HoverItem.type > 74 || Main.player[Main.myPlayer].HasItem(905)))
  				{
- 					float num5 = 5E-06f;
--					int damage = Main.HoverItem.damage;
+-					float num5 = 5E-06f;
 +					Player player = Main.player[Main.myPlayer];
-+					float damage = player.allDamage * Main.HoverItem.damage;
+ 					int damage = Main.HoverItem.damage;
  					if (Main.HoverItem.melee)
  					{
 -						array[num4] = string.Concat((int)(Main.player[Main.myPlayer].meleeDamage * (float)damage + num5));
-+						int damage2 = (int)(player.meleeDamage * (float)damage + num5);
++						int damage2 = (int)(player.meleeDamage & player.allDamage * (float)damage);
 +						ItemLoader.GetWeaponDamage(Main.HoverItem, player, ref damage2);
 +						PlayerHooks.GetWeaponDamage(player, Main.HoverItem, ref damage2);
 +						array[num4] = string.Concat(damage2);
  						string[] array4;
  						IntPtr intPtr;
  						(array4 = array)[(int)(intPtr = (IntPtr)num4)] = array4[(int)intPtr] + Lang.tip[2].Value;
+ 					}
+ 					else if (Main.HoverItem.ranged)
+ 					{
+-						float num6 = (float)damage * Main.player[Main.myPlayer].rangedDamage;
++						var num6 = (float)damage * player.rangedDamage & player.allDamage;
+ 						if (Main.HoverItem.useAmmo == AmmoID.Arrow || Main.HoverItem.useAmmo == AmmoID.Stake)
+ 						{
+ 							num6 *= Main.player[Main.myPlayer].arrowDamage;
 @@ -14667,21 +_,30 @@
  						{
  							num6 *= Main.player[Main.myPlayer].rocketDamage;
  						}
 -						array[num4] = string.Concat((int)(num6 + num5));
-+						int damage2 = (int)(num6 + num5);
++						int damage2 = (int)num6;
 +						ItemLoader.GetWeaponDamage(Main.HoverItem, player, ref damage2);
 +						PlayerHooks.GetWeaponDamage(player, Main.HoverItem, ref damage2);
 +						array[num4] = string.Concat(damage2);
@@ -1197,7 +1204,7 @@
  					else if (Main.HoverItem.magic)
  					{
 -						array[num4] = string.Concat((int)(Main.player[Main.myPlayer].magicDamage * (float)damage + num5));
-+						int damage2 = (int)(player.magicDamage * (float)damage + num5);
++						int damage2 = (int)(player.magicDamage & player.allDamage * (float)damage);
 +						ItemLoader.GetWeaponDamage(Main.HoverItem, player, ref damage2);
 +						PlayerHooks.GetWeaponDamage(player, Main.HoverItem, ref damage2);
 +						array[num4] = string.Concat(damage2);
@@ -1208,7 +1215,7 @@
  					else if (Main.HoverItem.thrown)
  					{
 -						array[num4] = string.Concat((int)(Main.player[Main.myPlayer].thrownDamage * (float)damage + num5));
-+						int damage2 = (int)(player.thrownDamage * (float)damage + num5);
++						int damage2 = (int)(player.thrownDamage & player.allDamage * (float)damage);
 +						ItemLoader.GetWeaponDamage(Main.HoverItem, player, ref damage2);
 +						PlayerHooks.GetWeaponDamage(player, Main.HoverItem, ref damage2);
 +						array[num4] = string.Concat(damage2);
@@ -1220,7 +1227,7 @@
  						if (Main.HoverItem.type == 3829 || Main.HoverItem.type == 3830 || Main.HoverItem.type == 3831)
  						{
 -							array[num4] = string.Concat((int)((Main.player[Main.myPlayer].minionDamage * (float)damage + num5) * 3f));
-+							int damage2 = (int)((player.minionDamage * (float)damage + num5) * 3f);
++							int damage2 = (int)((player.minionDamage & player.allDamage * (float)damage) * 3f);
 +							ItemLoader.GetWeaponDamage(Main.HoverItem, player, ref damage2);
 +							PlayerHooks.GetWeaponDamage(player, Main.HoverItem, ref damage2);
 +							array[num4] = string.Concat(damage2);
@@ -1228,7 +1235,7 @@
  						else
  						{
 -							array[num4] = string.Concat((int)(Main.player[Main.myPlayer].minionDamage * (float)damage + num5));
-+							int damage2 = (int)(player.minionDamage * (float)damage + num5);
++							int damage2 = (int)(player.minionDamage & player.allDamage * (float)damage);
 +							ItemLoader.GetWeaponDamage(Main.HoverItem, player, ref damage2);
 +							PlayerHooks.GetWeaponDamage(player, Main.HoverItem, ref damage2);
 +							array[num4] = string.Concat(damage2);
@@ -3647,7 +3654,7 @@
 +				*/
 +				int hoveredSnippet;
 +				ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, Main.fontMouseText, snippets[i].ToArray(), new Vector2((float)(170 + (Main.screenWidth - 800) / 2), (float)(120 + i * 30)), 0, Vector2.Zero, Vector2.One, out hoveredSnippet, -1);
-+				if (hoveredSnippet > -1) 
++				if (hoveredSnippet > -1)
 +					hoveredTextSnippet = snippets[i][hoveredSnippet];
 +			}
 +			if (hoveredTextSnippet != null) {
